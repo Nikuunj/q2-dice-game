@@ -1,9 +1,27 @@
-use anchor_lang::prelude::*;
+use anchor_lang::{prelude::*, system_program::{transfer, Transfer}};
 
 #[derive(Accounts)]
-pub struct Initialize {}
+pub struct Initialize<'info> {
+    #[account(mut)]
+    pub house: Signer<'info>,
 
-pub fn handler(ctx: Context<Initialize>) -> Result<()> {
-    msg!("Greetings from: {:?}", ctx.program_id);
-    Ok(())
+    #[account(
+        mut, 
+        seeds = [b"vault", house.key().as_ref()],
+        bump
+    )]
+    pub vault: SystemAccount<'info>,
+
+    pub system_program: Program<'info, System>
+}
+
+impl<'info> Initialize<'info> {
+    pub fn initialize(&mut self, amount: u64) -> Result<()> {
+        transfer(CpiContext::new(self.system_program.key(), 
+            Transfer {
+                from: self.house.to_account_info(),
+                to: self.vault.to_account_info()
+            }
+        ), amount)
+    }
 }

@@ -14,8 +14,4 @@ declare_id!("GKQtwjgpGFQXyEmFHxarsmDqpgbPwq9VoaVydVsv91Kn");
 #[program]
 pub mod dice_game {
     use super::*;
-
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        initialize::handler(ctx)
-    }
 }
