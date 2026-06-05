@@ -10,4 +10,24 @@ pub enum ErrorCode {
     MinimumRoll,
     #[msg("Max Roll overlflow")]
     MaxRoll,
+    #[msg("Math error")]
+    MathError,
+    #[msg("Invalid data length")]
+    Ed25519DataLength,
+    #[msg("Invalid Header")]
+    Ed25519Header,
+    #[msg("Signature offset wrong")]
+    Ed25519SignatureOffset,
+    #[msg("Signature must be one")]
+    Ed25519SignatureMustBeOne,
+    #[msg("Ed25519 message wrong")]
+    Ed25519Message,
+    #[msg("Ed25519 pubkey is wrong")]
+    Ed25519Pubkey,
+    #[msg("Ed25519 acocunt is wrong")]
+    Ed25519Accounts,
+    #[msg("Ed25519 program is wrong")]
+    Ed25519Program,
+    #[msg("Ed25519 signature Invalid")]
+    Ed25519Signature,
 }
