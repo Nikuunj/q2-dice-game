@@ -6,6 +6,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
+amm = "8NVA8HLgC9e3G4VgdfEAxPGeomNZgHFQGaAXDZsgYjHV"
 dice_game = "GKQtwjgpGFQXyEmFHxarsmDqpgbPwq9VoaVydVsv91Kn"
 
 [provider]
