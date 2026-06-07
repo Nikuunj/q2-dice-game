@@ -15,7 +15,4 @@ declare_id!("8NVA8HLgC9e3G4VgdfEAxPGeomNZgHFQGaAXDZsgYjHV");
 pub mod amm {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        initialize::handler(ctx)
-    }
 }
