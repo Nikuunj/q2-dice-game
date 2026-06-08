@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 
 #[account]
 #[derive(InitSpace)]
-pub struct Config {
+pub struct Config {#[msg("Custom error message")]
    pub seed: u64,
    pub authority: Option<Pubkey>,
    pub mint_x: Pubkey,
