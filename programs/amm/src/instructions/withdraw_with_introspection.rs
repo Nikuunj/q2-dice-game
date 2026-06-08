@@ -90,6 +90,8 @@ impl<'info> WithdrawWithIntrospection<'info> {
     ) -> Result<()> {
         require!(amount > 0, AmmErrorCode::InvalidAmount);
         require!(!self.config.locked, AmmErrorCode::PoolLocked);
+        
+        self.verify_burn(amount)?;
 
         let amounts = ConstantProduct::xy_withdraw_amounts_from_l(
             self.vault_x.amount,
