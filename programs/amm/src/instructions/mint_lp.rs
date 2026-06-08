@@ -1,11 +1,11 @@
 use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
-    token_interface::{Mint, TokenAccount, TokenInterface, MintTo, mint_to},
+    token_interface::{mint_to, Mint, MintTo, TokenAccount, TokenInterface},
 };
 use solana_instructions_sysvar::get_instruction_relative;
 
-use crate::{Config, error::AmmErrorCode};
+use crate::{Config, error::AmmErrorCode, instruction::DepositWithIntrospection};
 
 #[derive(Accounts)]
 pub struct MintLp<'info> {
@@ -29,7 +29,8 @@ pub struct MintLp<'info> {
     pub mint_lp: Box<InterfaceAccount<'info, Mint>>,
 
     #[account(
-        mut,
+        init_if_needed,
+        payer = user,
         associated_token::mint = mint_lp,
         associated_token::authority = user,
         associated_token::token_program = token_program_lp
@@ -48,6 +49,7 @@ pub struct MintLp<'info> {
 
 impl<'info> MintLp<'info> {
     pub fn mint_lp(&mut self, amount: u64) -> Result<()> {
+        require!(amount > 0, AmmErrorCode::InvalidAmount);
         require!(!self.config.locked, AmmErrorCode::PoolLocked);
 
         self.verify_deposit(amount)?;
@@ -73,7 +75,12 @@ impl<'info> MintLp<'info> {
         let ix = get_instruction_relative(-1, &self.instruction_sysvar.to_account_info())
             .map_err(|_| error!(AmmErrorCode::MissingPriorInstruction))?;
 
-        
+        require!(
+            &ix.data[..8]
+                == DepositWithIntrospection::DISCRIMINATOR,
+            AmmErrorCode::UnexpectedDiscriminator
+        );
+
         require_eq!(ix.program_id, crate::ID, AmmErrorCode::InvalidProgramId);
 
         require_eq!(ix.data.len(), 32, AmmErrorCode::InvalidDataLength);
@@ -91,6 +98,7 @@ impl<'info> MintLp<'info> {
     }
 
     fn confirm_accounts(&self, accounts: Vec<AccountMeta>) -> Result<()> {
+        require!(accounts.len() >= 12, AmmErrorCode::InvalidAccountsLength);
 
         let expected_accounts: [Pubkey; 4] = [
             self.user.key(),

@@ -15,5 +15,9 @@ pub enum AmmErrorCode {
     #[msg("Pool is lock, please contract auther")]
     PoolLocked,
     #[msg("Invalid key")]
-    InvalidKey
+    InvalidKey,
+    #[msg("Invalid accounts len")]
+    InvalidAccountsLength,
+    #[msg("Unexpected DISCRIMINATOR")]
+    UnexpectedDiscriminator
 }
