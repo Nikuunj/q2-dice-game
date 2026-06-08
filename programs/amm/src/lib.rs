@@ -24,6 +24,18 @@ pub mod amm {
         ctx.accounts.deposit_with_introseption(amount, max_x, max_y)
     }
 
+    pub fn withdraw_with_introspection(
+        ctx: Context<WithdrawWithIntrospection>,
+        amount: u64,
+        min_x: u64,
+        min_y: u64,
+    ) -> Result<()> {
+        ctx.accounts.withdraw_with_introseption(amount, min_x, min_y)
+    }
+
+    pub fn burn_lp(ctx: Context<BurnLp>, amount: u64) -> Result<()> {
+        ctx.accounts.burn_lp(amount)
+    }
     pub fn mint_lp(ctx: Context<MintLp>, amount: u64) -> Result<()> {
         ctx.accounts.mint_lp(amount)
     }
