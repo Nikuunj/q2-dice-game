@@ -100,11 +100,12 @@ impl<'info> MintLp<'info> {
     fn confirm_accounts(&self, accounts: Vec<AccountMeta>) -> Result<()> {
         require!(accounts.len() >= 12, AmmErrorCode::InvalidAccountsLength);
 
-        let expected_accounts: [Pubkey; 4] = [
+        let expected_accounts: [Pubkey; 5] = [
             self.user.key(),
             self.config.mint_x,
             self.config.mint_y,
             self.config.key(),
+            self.mint_lp.key()
         ];
 
         for (index, key) in expected_accounts.iter().enumerate() {
